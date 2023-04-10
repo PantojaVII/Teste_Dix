@@ -1,0 +1,38 @@
+version: '3'
+networks:
+  minha_rede:
+    driver: bridge
+    
+services:
+  db:
+    image: mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: 231212
+      MYSQL_DATABASE: dix
+      MYSQL_USER: pantoja
+      MYSQL_PASSWORD: 231212
+    volumes:
+      - ./volume_bd:/var/lib/mysql
+    ports:
+      - "3307:3306" #porta do mysql
+    networks:
+      - minha_rede
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    restart: always
+    environment:
+      PMA_HOST: db
+      MYSQL_ROOT_PASSWORD: 231212
+    ports:
+      - "8070:80" #porta do pypmyadmin
+    depends_on:
+      - db
+    networks:
+      - minha_rede
+      
+#Para subir os containert - > docker-composer up -d
+#para para o container  - > docker-compose down
+#Para para e remover tudo que foi instalado no docker -> docker-compose down --rmi all
+#Para parar os containers e não excluir os dados do volume, você pode utilizar o comando docker-compose down. Esse comando para e remove todos os containers, redes e imagens criadas pelo compose, mas mantém os volumes existentes.
+#Porém, se você quiser parar somente os containers sem remover nada, você pode utilizar o comando docker-compose stop. Esse comando irá parar todos os containers criados pelo compose, mas não irá remover nenhum recurso.
